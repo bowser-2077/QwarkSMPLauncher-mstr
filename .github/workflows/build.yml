@@ -1,8 +1,12 @@
 # module du helios launcher
 name: Launcher Build
+
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
+
+permissions:
+  contents: write   # Nécessaire pour créer une release
 
 jobs:
   create-release:
@@ -13,15 +17,16 @@ jobs:
 
       - name: Get version
         run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV
-      
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # ⚠️ Si le dépôt est un fork, remplace par secrets.PERSONAL_TOKEN
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         with:
-          tag_name: ${{ env.version }}
-          release_name: release ${{ env.version }}
+          tag_name: v${{ env.version }}
+          release_name: Release v${{ env.version }}
           draft: false
           prerelease: ${{ contains(env.version, 'beta') || contains(env.version, 'alpha') }}
 
@@ -35,9 +40,9 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
@@ -47,12 +52,13 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
         shell: bash
 
-      - name: Build
+      - name: Build launcher
         env:
-          GH_TOKEN: ${{ secrets.github_token }}
+          # ⚠️ Mets ici ton token personnel si besoin (sinon garde GITHUB_TOKEN)
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: npm run build
         shell: bash
