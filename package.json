@@ -5,9 +5,9 @@
     "description": "Launcher Mincraft pour le serveur QwarkSMP",
     "main": "src/app.js",
     "author": {
-        "name": "luuxis, Inc.",
-        "email": "contact@luuxis.fr",
-        "url": "https://github.com/luuxis"
+        "name": "bowser2077.",
+        "email": "contact@qwarksmp.eu",
+        "url": "https://github.com/bowser-2077"
     },
     "url": "http://qwarksmp.atwebpages.com",
     "scripts": {
